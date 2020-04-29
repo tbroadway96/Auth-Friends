@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios'
 
 const LoginPage = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState()
+
+    const history = useHistory()
 
     const handleUserNameChange = (e) => {
         setUsername(e.target.value);
@@ -16,6 +18,7 @@ const LoginPage = () => {
     }
 
     const onSubmit = (e) => {
+        e.preventDefault()
         console.log('submitted');
         setIsLoading(true);
         axios
@@ -25,8 +28,8 @@ const LoginPage = () => {
             })
             .then(res => {
                 console.log(res);
-                localStorage.putItem('token', res.data.payload)
-                console.log('local storage after axios', localStorage)
+                localStorage.setItem('token', res.data.payload)
+                history.push('/friends-list')
             })
             .catch(err => console.error(err))
         setUsername('');
